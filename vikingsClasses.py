@@ -1,7 +1,5 @@
-import random
-
-
 class Soldier:
+
     def __init__(self, health, strength):
         self.health = health
         self.strength = strength
@@ -13,9 +11,11 @@ class Soldier:
         self.health = self.health - damage
 
 
+# Viking
 class Viking(Soldier):
+
     def __init__(self, name, health, strength):
-        super().__init__(name, health, strength)
+        super().__init__(health=health, strength=strength)
         self.name = name
 
     def receiveDamage(self, damage):
@@ -27,6 +27,7 @@ class Viking(Soldier):
 
     def battleCry(self):
         return "Odin Owns You All!"
+# Saxon
 
 
 class Saxon(Soldier):
