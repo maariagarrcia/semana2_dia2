@@ -1,70 +1,74 @@
-from configparser import NoOptionError
+import random
 
 
 class Soldier:
-    
-    def __init__(self,salud,fuerza):
-        
-        self.salud = salud
-        self.fuerza = fuerza
+    def __init__(self, health, strength):
+        self.health = health
+        self.strength = strength
 
-    def get_salud(self):
-        return self.salud
+    def attack(self):
+        return self.strength
 
-
-    def get_fuerza(self):
-        return self.fuerza
-
-    def recibir_daño(self, daño):
-        self.salud = self.salud - daño
-
-# Viking
+    def receiveDamage(self, damage):
+        self.health = self.health - damage
 
 
 class Viking(Soldier):
-    def __init__(self,nombre):
-        self.nombre= nombre
-        super().__init__()
-        
-    def recibir_daño(self, daño):
-        self.salud = self.salud - daño
-        if self.salud <= 0:
-            print(self.nombre, " ha muerto en combate")
+    def __init__(self, name, health, strength):
+        super().__init__(name, health=health, strength=health)
+        self.name = name
+
+    def receiveDamage(self, damage):
+        self.health = self.health - damage
+        if self.health > 0:
+            return f"{self.name} has received {damage} points of damage"
         else:
-            print(self.nombre, " ha recibido", daño, " puntos  de daño")
+            return f"{self.name} has died in act of combat"
+
+    def battleCry(self):
+        return "Odin Owns You All!"
+
+
+class Saxon(Soldier):
+    def __init__(self, health, strength):
+        super().__init__(health=health, strength=strength)
     
-    def battle_cry(self):
-        print("Odin Owns You All!")
-
-
-
-class Saxon:
-    def __init__(self):
-        super().__init__()
-
-    def recibir_daño(self, daño):
-        self.salud = self.salud - daño
-        if self.salud <= 0:
-            print("Un Saxon ha muerto en combate")
+    def receiveDamage(self, damage):
+        self.health = self.health - damage
+        if self.health > 0:
+            return f"A Saxon has received {damage} points of damage"
         else:
-            print("Un Saxon ha recibido", daño, " puntos  de daño")
+            return f"A Saxon has died in combat"
 
-
-class War:
+class War():
     def __init__(self):
-        self.vikingos=[]
-        self.saxon=[]
-        self.ataque_vikingo=None
-        self.ataque_saxon=None
-        self.estado=None
-
-    def set_añadir_vikingo(self, vikingo):
-        self.vikingos.append(vikingo)
-
-    def set_añadir_saxon(self, saxon):
-        self.saxon.append(saxon)
-
-    def set_ataque_vikingo(self, vikingo):
-        
-
-
+        self.vikingArmy = []
+        self.saxonArmy = []
+    def addViking(self, viking):
+        self.vikingArmy.append(viking)
+    def addSaxon(self, saxon):
+        self.saxonArmy.append(saxon)
+    def vikingAttack(self):
+        # importa addViking
+        import random
+        viking = random.choice(self.vikingArmy)
+        saxon = random.choice(self.saxonArmy)
+        result = saxon.receiveDamage(viking.strength)
+        if saxon.health <= 0:
+            self.saxonArmy.remove(saxon)
+        return result
+    def saxonAttack(self):
+        import random
+        viking = random.choice(self.vikingArmy)
+        saxon = random.choice(self.saxonArmy)
+        result = viking.receiveDamage(saxon.strength)
+        if viking.health <= 0:
+            self.vikingArmy.remove(viking)
+        return result
+    def showStatus(self):
+        if len(self.saxonArmy) == 0:
+            return "Vikings have won the war of the century!"
+        elif len(self.vikingArmy) == 0:
+            return "Saxons have fought for their lives and survive another day..."
+        else:
+            return "Vikings and Saxons are still in the thick of battle."
